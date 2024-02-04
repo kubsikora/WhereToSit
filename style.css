@@ -1,0 +1,90 @@
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(31,31,31);
+}
+
+.menu {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+    background-color: #d5d5d5;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.menuelement {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.4%;
+    width: 22%;
+    height: 91%;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.98);
+    border-radius: 10px;
+}
+
+.inmenu {
+    align-items: top;
+    justify-content: center;
+    width: 70%;
+    height: 70%;
+    background-color: #ffffff;
+}
+
+.menukrzeslo {
+    width: 10%;
+    height: 100%;
+    background-color: #969696;
+}
+
+.kwadrat {
+    width: 60px;
+    height: 60px;
+    background-color: #0c24c9;
+    border-radius: 10px;
+}
+
+.prostokat {
+    width: 120px;
+    height: 60px;
+    background-color: #fc0404;
+    border-radius: 10px;
+}
+
+.prostokat90 {
+    width: 60px;
+    height: 120px;
+    background-color: #4dc525;
+    border-radius: 10px;
+}
+
+.kolo {
+    width: 60px;
+    height: 60px;
+    background-color: #dec418;
+    border-radius: 50%;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgb(31,31,31);
+
+}
+
+.XY {
+    width: 10%;
+    height: 10%;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+}
+
+
