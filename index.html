@@ -4,18 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <title>Przeciąganie kwadratu</title>
 </head>
 <body>
 <div class="calosc">
     <div class="elementy">
-        <div id="data"><br>to</div>
+        <div class="konelementy">
+            <div class="kategorieelementy">
+                <div id="info" class="guzik1elementy">
+                    <h3 style="padding-left: 30%; padding-top: 15%; color: rgba(0, 0, 0, 0.50); font-size: 20px;">Info</h3>
+                </div>
+                <div id="lista" class="guzik2elementy">
+                    <h3 style="padding-left: 35%; padding-top: 15%; color: rgba(0, 0, 0, 0.50); font-size: 20px;">List</h3>
+                </div>
+                <div id="dalej" class="guzik3elementy">
+                    <h3 style="padding-left: 30%; padding-top: 15%; color: rgba(0, 0, 0, 0.50); font-size: 20px;">Next</h3>
+                </div>
+            </div>
+            <div id="infoprint" class="scrollelementy">
+                <div id="data">Hello! This is your simple and convenient tool for organizing guest seating at your event. Below, you can find tables and seats that you can use on the board. " +
+                    "If you add too much, don't worry. All you need to do is drag it to the 'DROP' at the top right corner to delete it. In the 'List' category above, " +
+                    "you can check how many seats or tables of each kind you have in your project. When you've finalized everything and are ready to proceed, click the " +
+                    "'Next' button. Have fun!</div>
+            </div>
+            <div id="listaprint" class="scrollelementy" style="background: blue;">
+
+            </div>
+            <div id="dalejprint" class="scrollelementy">
+            </div>
+        </div>
     </div>
     <div class="mainleft">
     <div class="containerbramka">
         <div class="container">
-            <div class="smietnik"><h2 style="color: rgba(0, 0, 0, 0.50); margin-left: 37%; margin-top: 27%;">DROP</h2></div>
+            <div class="smietnik"><h2 style="color: rgba(0, 0, 0, 0.50); margin-left: 30%; margin-top: 25%;">DROP</h2></div>
         </div>
         <div id="XY" style='margin-top: -5px; margin-left: 20px;'></div>
     </div>
@@ -41,7 +64,7 @@
             <div class="inmenu">
                 <center>
                     <div class="prostokat90" style="margin-top: -5%">
-                    <button id="addButtonprostokat90" style="width: 170%; margin-left: -35%; margin-top: 135%;">Add long table</button>
+                    <button id="addButtonprostokat90" style="width: 205%; margin-left: -55%; margin-top: 135%;">Add long table</button>
                     </div>
                 </center>
             </div>

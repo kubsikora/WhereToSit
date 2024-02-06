@@ -1,13 +1,18 @@
 const containerElement = document.querySelector('.container');
 const XY = document.getElementById('XY');
 const data = document.getElementById('data');
-let currentElementNumber = 1, NumberKrzesla = 1, NumberKwadrat = 1, NumberProstokat = 1, NumberProstokat90 = 1, NumberKolo = 1;
+let currentElementNumber = 1, NumberKrzesla = 1, NumberKwadrat = 1, NumberProstokat = 1, NumberProstokat90 = 1, NumberKolo = 1, listaint = 0;
 const smietnikElement = document.querySelector('.smietnik');
-const meble = [];
+const localmebli = []; // zawiera kazdy element z lokalizacja
+const meble = []; //zawiera ponumerowane meble
+
 
 function makeDraggable(element) {
-    let offsetX, offsetY, isDragging = false;
+    const uniqueId = generateUniqueId();
+    element.id = uniqueId;
 
+    let offsetX, offsetY, isDragging = false;
+    let mainx = 0, mainy = 0;
     element.addEventListener('mousedown', (event) => {
         isDragging = true;
         offsetX = event.clientX - element.getBoundingClientRect().left + 50;
@@ -15,7 +20,6 @@ function makeDraggable(element) {
         element.style.cursor = 'grabbing';
         const listaElementow = pobierzListeElementow();
         const listaElementowString = JSON.stringify(listaElementow, null, 2);
-        data.innerHTML = meble;
     });
 
     document.addEventListener('mousemove', (event) => {
@@ -27,6 +31,9 @@ function makeDraggable(element) {
         const containerRect = containerElement.getBoundingClientRect();
         const maxX = containerRect.width - element.offsetWidth;
         const maxY = containerRect.height - element.offsetHeight;
+
+        mainx = x;
+        mainy = y;
 
         if (x >= 0 && x <= maxX && y >= 0 && y <= maxY) {
             element.style.transform = `translate(${x}px, ${y}px)`;
@@ -44,7 +51,7 @@ function makeDraggable(element) {
             const elementIndex = meble.findIndex((el) => el === element.className + element.innerHTML);
             if (elementIndex !== -1) {
                 meble.splice(elementIndex, 1);
-                if(elementIndex != NumberKrzesla){
+                if (elementIndex != NumberKrzesla) {
                     NumberKrzesla -= 1;
                 }
             }
@@ -53,8 +60,8 @@ function makeDraggable(element) {
                 currentElementNumber -= 1;
 
             }
-            if (element.className != 'krzeslo'){
-                usunElementZListyTekstem(meble,element.className);
+            if (element.className != 'krzeslo') {
+                usunElementZListyTekstem(meble, element.className);
             }
         }
     });
@@ -63,8 +70,62 @@ function makeDraggable(element) {
         if (!isDragging) return;
         isDragging = false;
         element.style.cursor = 'grab';
+
+        const position = { id: element.id, x: mainx, y: mainy, type: element.className };
+        const existingIndex = localmebli.findIndex((item) => item.id === element.id);
+
+
+        if (existingIndex !== -1) {
+            localmebli.splice(existingIndex, 1);
+        }
+
+        if (isElementInTrashArea(element)) {
+            containerElement.removeChild(element);
+        } else {
+            localmebli.push(position);
+        }
+
+        if (listaint === 1) {
+            data.innerHTML = JSON.stringify(localmebli);
+        }
+
+
     });
 }
+    function generateUniqueId() {
+        return Math.random().toString(36).substr(2, 9); // Prosta funkcja generująca unikalny identyfikator
+    }
+
+function isElementInTrashArea(element) {
+        const elementRect = element.getBoundingClientRect();
+        const trashRect = smietnikElement.getBoundingClientRect();
+
+        return (
+            elementRect.left >= trashRect.left &&
+            elementRect.right <= trashRect.right &&
+            elementRect.top >= trashRect.top &&
+            elementRect.bottom <= trashRect.bottom
+        );
+    }
+
+    function restoreBlocksFromLocalStorage() {
+        const savedBlocks = localStorage.getItem('savedBlocks');
+        if (savedBlocks) {
+            const parsedBlocks = JSON.parse(savedBlocks);
+            parsedBlocks.forEach((position) => {
+                const newDraggableElement = document.createElement('div');
+                newDraggableElement.className = position.type;
+                newDraggableElement.style.position = 'absolute';
+                newDraggableElement.style.left = position.x + 'px';
+                newDraggableElement.style.top = position.y + 'px';
+                containerElement.appendChild(newDraggableElement);
+                makeDraggable(newDraggableElement);
+            });
+        }
+    }
+
+
+    restoreBlocksFromLocalStorage();
 
 const addButtonKwadrat = document.getElementById('addButtonkwadrat');
 const addButtonProstokat = document.getElementById('addButtonprostokat');
@@ -77,7 +138,7 @@ addButtonKwadrat.addEventListener('click', () => {
     newDraggableElement.className = 'kwadrat';
     newDraggableElement.style.position = 'absolute';
     newDraggableElement.style.left = '60px';
-    newDraggableElement.style.top = '60px';
+    newDraggableElement.style.top = '70px';
     containerElement.appendChild(newDraggableElement);
     meble.push('kwadrat' + nastepnyElement(meble,'kwadrat').toString());
     NumberKwadrat += 1;
@@ -89,7 +150,7 @@ addButtonProstokat.addEventListener('click', () => {
     newDraggableElement.className = 'prostokat';
     newDraggableElement.style.position = 'absolute';
     newDraggableElement.style.left = '60px';
-    newDraggableElement.style.top = '60px';
+    newDraggableElement.style.top = '70px';
     containerElement.appendChild(newDraggableElement);
     meble.push('prostokat' + nastepnyElement(meble,'prostokat').toString());
     NumberProstokat += 1;
@@ -101,7 +162,7 @@ addButtonProstokat90.addEventListener('click', () => {
     newDraggableElement.className = 'prostokat90';
     newDraggableElement.style.position = 'absolute';
     newDraggableElement.style.left = '60px';
-    newDraggableElement.style.top = '60px';
+    newDraggableElement.style.top = '70px';
     containerElement.appendChild(newDraggableElement);
     meble.push('prostokat90' + nastepnyElement(meble,'prostokat90').toString());
     makeDraggable(newDraggableElement);
@@ -112,7 +173,7 @@ addButtonkolo.addEventListener('click', () => {
     newDraggableElement.className = 'kolo';
     newDraggableElement.style.position = 'absolute';
     newDraggableElement.style.left = '60px';
-    newDraggableElement.style.top = '60px';
+    newDraggableElement.style.top = '70px';
     containerElement.appendChild(newDraggableElement);
     meble.push('kolo' + nastepnyElement(meble,'kolo').toString());
     NumberKolo += 1;
@@ -124,8 +185,8 @@ addButtonkrzeslo.addEventListener('click', () => {
     newDraggableElement.className = 'krzeslo';
     newDraggableElement.style.position = 'absolute';
 
-    newDraggableElement.style.left = '60px';
-    newDraggableElement.style.top = '60px';
+    newDraggableElement.style.left = '80px';
+    newDraggableElement.style.top = '80px';
     containerElement.appendChild(newDraggableElement);
     newDraggableElement.innerHTML = currentElementNumber;
     currentElementNumber = currentElementNumber + 1;
@@ -194,4 +255,38 @@ function pobierzListeElementow() {
 
     return listaElementow;
 }
+
+const info = document.getElementById('info');
+const infoprint = document.getElementById('infoprint');
+const lista = document.getElementById('lista');
+const listaprint = document.getElementById('listaprint');
+const dalej = document.getElementById('dalej');
+const dalejprint = document.getElementById('dalejprint');
+
+info.addEventListener('click', () => {
+    listaint = 0;
+    /*infoprint.style.visibility = 'visible';
+    listaprint.style.visibility = 'hidden';
+    dalejprint.style.visibility = 'hidden';*/
+    data.innerHTML = "Hello! This is your simple and convenient tool for organizing guest seating at your event. Below, you can find tables and seats that you can use on the board. " +
+        "If you add too much, don't worry. All you need to do is drag it to the 'DROP' at the top right corner to delete it. In the 'List' category above, " +
+        "you can check how many seats or tables of each kind you have in your project. When you've finalized everything and are ready to proceed, click the " +
+        "'Next' button. Have fun!";
+});
+
+    lista.addEventListener('click', () => {
+        listaint = 1;
+        /*infoprint.style.visibility = 'hidden';
+        listaprint.style.visibility = 'visible';
+        dalejprint.style.visibility = 'hidden';*/
+        data.innerHTML = JSON.stringify(localmebli);
+    });
+
+dalej.addEventListener('click', () => {
+    listaint = 0;
+    /*infoprint.style.visibility = 'hidden';
+    listaprint.style.visibility = 'hidden';
+    dalejprint.style.visibility = 'visible';*/
+    data.innerHTML = "";
+});
 
