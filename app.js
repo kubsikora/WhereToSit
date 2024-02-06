@@ -5,6 +5,7 @@ let currentElementNumber = 1, NumberKrzesla = 1, NumberKwadrat = 1, NumberProsto
 const smietnikElement = document.querySelector('.smietnik');
 const localmebli = []; // zawiera kazdy element z lokalizacja
 const meble = []; //zawiera ponumerowane meble
+let ultimjsonData = "";
 
 
 function makeDraggable(element) {
@@ -60,9 +61,8 @@ function makeDraggable(element) {
                 currentElementNumber -= 1;
 
             }
-            if (element.className != 'krzeslo') {
-                usunElementZListyTekstem(meble, element.className);
-            }
+            usunElementZListyTekstem(meble, element.className);
+
         }
     });
 
@@ -84,13 +84,73 @@ function makeDraggable(element) {
         } else {
             localmebli.push(position);
         }
-
+        ultimjsonData = JSON.stringify(localmebli);
         if (listaint === 1) {
-            data.innerHTML = JSON.stringify(localmebli);
+            listaramka(JSON.stringify(localmebli));
         }
 
 
     });
+}
+function countOccurrences(list) {
+    const occurrences = [];
+
+    for (const element of list) {
+        const existingIndex = occurrences.findIndex(item => item.element === element);
+
+        if (existingIndex !== -1) {
+            occurrences[existingIndex].count++;
+        } else {
+            occurrences.push({ element, count: 1 });
+        }
+    }
+
+    return occurrences;
+}
+function listaramka(jsonData) {
+    const wordsArray = jsonData.split(',');
+    const typy = [];
+
+    for (let i = 0; i < wordsArray.length; i++) {
+        if (wordsArray[i].includes("type")) {
+            if (i === wordsArray.length - 1) {
+                typy.push(wordsArray[i].substring(8, wordsArray[i].length - 3))
+            } else {
+                typy.push(wordsArray[i].substring(8, wordsArray[i].length - 2))
+            }
+        }
+    }
+
+    // Update meble array with current elements on the board
+    meble.length = 0;
+    const elements = document.querySelectorAll('.container div');
+    elements.forEach((element) => {
+        meble.push(element.className);
+    });
+
+    const sumowaniemebli = countOccurrences(typy);
+
+    if (sumowaniemebli.length === 0) {
+        data.innerHTML = 'Here, you will see how many objects you have added to the board.'
+    } else {
+        // Generate the table based on the sumowaniemebli array
+        const tableRows = sumowaniemebli.map((item) => {
+            return `<tr style="border: 1px solid rgba(0, 0, 0, 0.98); width: 100px; height: 40px;">
+                        <td style="border-right: 1px solid rgba(0, 0, 0, 0.98);">${item.element}</td>
+                        <td>${item.count}</td>
+                    </tr>`;
+        });
+
+        const tableHTML = `<br><center><table style="text-align: center;">
+                                <tr style="border: 1px solid rgba(0, 0, 0, 0.98); width: 100px; height: 40px;">
+                                    <td style="border-right: 1px solid rgba(0, 0, 0, 0.98);" width="100px">type</td>
+                                    <td width="100px">number</td>
+                                </tr>
+                                ${tableRows.join('')}
+                            </table></center>`;
+
+        data.innerHTML = tableHTML;
+    }
 }
     function generateUniqueId() {
         return Math.random().toString(36).substr(2, 9); // Prosta funkcja generująca unikalny identyfikator
@@ -140,7 +200,7 @@ addButtonKwadrat.addEventListener('click', () => {
     newDraggableElement.style.left = '60px';
     newDraggableElement.style.top = '70px';
     containerElement.appendChild(newDraggableElement);
-    meble.push('kwadrat' + nastepnyElement(meble,'kwadrat').toString());
+    meble.push('kwadrat');
     NumberKwadrat += 1;
     makeDraggable(newDraggableElement);
 });
@@ -152,7 +212,7 @@ addButtonProstokat.addEventListener('click', () => {
     newDraggableElement.style.left = '60px';
     newDraggableElement.style.top = '70px';
     containerElement.appendChild(newDraggableElement);
-    meble.push('prostokat' + nastepnyElement(meble,'prostokat').toString());
+    meble.push('prostokat');
     NumberProstokat += 1;
     makeDraggable(newDraggableElement);
 });
@@ -164,7 +224,7 @@ addButtonProstokat90.addEventListener('click', () => {
     newDraggableElement.style.left = '60px';
     newDraggableElement.style.top = '70px';
     containerElement.appendChild(newDraggableElement);
-    meble.push('prostokat90' + nastepnyElement(meble,'prostokat90').toString());
+    meble.push('prostokat90');
     makeDraggable(newDraggableElement);
 });
 
@@ -175,7 +235,7 @@ addButtonkolo.addEventListener('click', () => {
     newDraggableElement.style.left = '60px';
     newDraggableElement.style.top = '70px';
     containerElement.appendChild(newDraggableElement);
-    meble.push('kolo' + nastepnyElement(meble,'kolo').toString());
+    meble.push('kolo');
     NumberKolo += 1;
     makeDraggable(newDraggableElement);
 });
@@ -190,7 +250,7 @@ addButtonkrzeslo.addEventListener('click', () => {
     containerElement.appendChild(newDraggableElement);
     newDraggableElement.innerHTML = currentElementNumber;
     currentElementNumber = currentElementNumber + 1;
-    meble.push('krzeslo' + NumberKrzesla);
+    meble.push('krzeslo');
     NumberKrzesla += 1;
     makeDraggable(newDraggableElement);
 });
@@ -274,19 +334,20 @@ info.addEventListener('click', () => {
         "'Next' button. Have fun!";
 });
 
-    lista.addEventListener('click', () => {
-        listaint = 1;
-        /*infoprint.style.visibility = 'hidden';
-        listaprint.style.visibility = 'visible';
-        dalejprint.style.visibility = 'hidden';*/
-        data.innerHTML = JSON.stringify(localmebli);
-    });
+lista.addEventListener('click', () => {
+    listaint = 1;
+    /*infoprint.style.visibility = 'hidden';
+    listaprint.style.visibility = 'visible';
+    dalejprint.style.visibility = 'hidden';*/
+    listaramka(ultimjsonData);
+});
 
 dalej.addEventListener('click', () => {
     listaint = 0;
     /*infoprint.style.visibility = 'hidden';
     listaprint.style.visibility = 'hidden';
     dalejprint.style.visibility = 'visible';*/
-    data.innerHTML = "";
+    data.innerHTML = JSON.stringify(localmebli);
 });
+
 
