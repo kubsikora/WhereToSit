@@ -1,0 +1,17 @@
+.calosc{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgb(31,31,31);
+}
+
+.container{
+    float: left;
+    margin: 5%;
+    width: 45%;
+    height: 80%;
+    background-color: #ffffff;
+    border-radius: 2%;
+}

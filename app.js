@@ -346,8 +346,10 @@ dalej.addEventListener('click', () => {
     listaint = 0;
     /*infoprint.style.visibility = 'hidden';
     listaprint.style.visibility = 'hidden';
-    dalejprint.style.visibility = 'visible';*/
-    data.innerHTML = JSON.stringify(localmebli);
+    dalejprint.style.visibility = 'visible';
+    data.innerHTML = JSON.stringify(localmebli);*/
+    localStorage.setItem('localmebli', JSON.stringify(localmebli));
+    window.location.href = 'goscie.html';
 });
 
 
