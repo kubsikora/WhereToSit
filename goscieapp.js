@@ -4,12 +4,10 @@ const storedList = localStorage.getItem('localmebli');
 const listaElementow = storedList ? JSON.parse(storedList) : [];
 let ilosc_miejsc = 1;
 
-data.innerHTML = JSON.stringify(listaElementow);
+//data.innerHTML = JSON.stringify(listaElementow);
 
 if (containerElement) {
     renderElementsFromJSON(containerElement, listaElementow);
-} else {
-    console.error("Element with id 'container' not found.");
 }
 
 function renderElementsFromJSON(container, jsonData) {
@@ -145,4 +143,32 @@ function downloadTextFile() {
     link.click();
 
     document.body.removeChild(link);
+}
+
+const editableList = document.getElementById('inputright');
+
+// Dodaj początkowe elementy do listy
+for(let i = 1; i < ilosc_miejsc; i++){
+    addListItem(`${i}`);
+}
+
+// Funkcja do dodawania nowego elementu do listy
+function addListItem(text) {
+    const listItem = document.createElement('div');
+    listItem.innerHTML = `<span><h3 style="float: left; margin-top: 15px;">${text}</h3></span> 
+    <input type="text" id="name${text}" name="name${text}" style="float: left; margin-top: 20px; width: 300px; margin-left: 20px;">`;
+    listItem.style.border = '1px solid black';
+    listItem.style.height = '70px';
+    editableList.appendChild(listItem);
+}
+
+// Funkcja do edycji elementu w liście
+function editListItem(button) {
+    const listItem = button.parentNode;
+    const span = listItem.querySelector('span');
+    const newText = prompt('Edytuj tekst:', span.textContent);
+
+    if (newText !== null) {
+        span.textContent = newText;
+    }
 }
