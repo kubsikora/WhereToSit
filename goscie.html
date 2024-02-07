@@ -8,8 +8,22 @@
 </head>
 <body>
 <div class="calosc">
-    <div class="container">
-        <div id="data"></div>
+    <div class="mainleftcontainer">
+        <div id = "container" class="container">
+            <div id="data"></div>
+        </div>
+        <div style=" margin-top: 3%; margin-left: 10%; width: 80%; height: 15%; float: left; background: ;">
+            <div style="border-bottom: 1px solid rgba(0, 0, 0, 0.98); width: 100%; height: 30%;">
+                <div id="wczytaj" style="margin-left: 15px; float: left; color: red;">Load</div>
+                <div id="zapisz" style="margin-left: 20px; float: left;">Save</div>
+            </div>
+            <div id="savesystem" style="margin-top: 10px; margin-left: 10px;">
+                <input type="file" id="fileInput">
+                <button onclick="handleFile()">Load File</button>
+                <div id="fileContent"></div>
+            </div>
+        </div>
+
     </div>
 </div>
 <script src="goscieapp.js"></script>
