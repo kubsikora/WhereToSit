@@ -2,6 +2,8 @@ const containerElement = document.getElementById('container');
 const data = document.getElementById('data');
 const storedList = localStorage.getItem('localmebli');
 const listaElementow = storedList ? JSON.parse(storedList) : [];
+let ilosc_miejsc = 1;
+
 data.innerHTML = JSON.stringify(listaElementow);
 
 if (containerElement) {
@@ -22,6 +24,8 @@ function renderElementsFromJSON(container, jsonData) {
             newElement.style.position = 'absolute';
             newElement.style.left = elementData.x + 'px';
             newElement.style.top = elementData.y + 100 + 'px';
+            newElement.innerHTML = ilosc_miejsc;
+            ilosc_miejsc += 1;
             container.appendChild(newElement);
         }
         if(elementData.type=="prostokat"){
@@ -88,6 +92,7 @@ function handleFile() {
                 const fileContent = JSON.parse(e.target.result);
                 data.innerHTML = JSON.stringify(fileContent);
                 containerElement.innerHTML = '';
+                ilosc_miejsc = 1;
                 renderElementsFromJSON(containerElement, fileContent);
             } catch (error) {
                 console.error('Error parsing JSON:', error);
